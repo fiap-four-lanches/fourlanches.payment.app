@@ -23,7 +23,25 @@ de pedidos e da cozinha (produção).
 
 ## 3. Para executar localmente com Docker
 
-[TODO: preparar a documentação para rodar com o docker]()
+#### 3.1. Para buildar, executar as migration e rodar o app no docker pela primeira vez
+
+`docker compose up --build -d`
+
+#### 3.2. Para executar o app com docker após a primeira vez
+Após rodar a primeira o comando acima, execute o seguinte comando abaixo para que apenas execute
+os containers sem a etapa de build e migration.
+
+`docker compose up -d fourlanches-payment-service mongodb`
+
+#### 3.3. Necessário um arquivo .env na raiz do projeto com a seguinte conteúdo:
+```
+DATABASE_USERNAME=username
+DATABASE_PASSWORD=password
+DATABASE_AUTH=auth
+DATABASE_BASE=database
+```
+
+Para isso só copiar o arquivo `.env.example` e renomear a cópia para `.env`
 
 ## 4. Testando com insomnia
 
@@ -32,4 +50,4 @@ estará pronta para ser usada.
 
 ### 4.1. Nota para executar com Insomnia executando pelo Docker
 
-Subindo a aplicação via docker, a mesma se encotrará disponível no localhost:XXXX para ser acessada
+Subindo a aplicação via docker, a mesma se encotrará disponível no localhost:8080 para ser acessada
