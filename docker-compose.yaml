@@ -9,18 +9,18 @@ services:
     environment:
       - MONGO_HOST=mongodb
       - MONGO_PORT=27017
-      - MONGO_USER=root
-      - MONGO_PASS=secret
-      - MONGO_AUTH=admin
-      - MONGO_DATABASE=payments
+      - MONGO_USER=${DATABASE_USERNAME}
+      - MONGO_PASS=${DATABASE_PASSWORD}
+      - MONGO_AUTH=${DATABASE_AUTH}
+      - MONGO_DATABASE=${DATABASE_BASE}
     ports:
       - '8080:8080'
   mongodb:
     image: mongo:latest
     environment:
-      - MONGO_INITDB_DATABASE=payments
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=secret
+      - MONGO_INITDB_DATABASE=${DATABASE_BASE}
+      - MONGO_INITDB_ROOT_USERNAME=${DATABASE_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DATABASE_PASSWORD}
     ports:
       - '27017:27017'
     volumes:
