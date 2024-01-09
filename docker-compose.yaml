@@ -1,0 +1,27 @@
+version: '3'
+services:
+  fourlanches-payment-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_USER=root
+      - MONGO_PASS=secret
+      - MONGO_AUTH=admin
+      - MONGO_DATABASE=payments
+    ports:
+      - '8080:8080'
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_DATABASE=payments
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./data:/data/db
