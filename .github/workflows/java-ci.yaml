@@ -31,7 +31,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       with:
-        projectBaseDir: build/classes/java/main
+        projectBaseDir: ./build/classes/java/main
         args: >
           -Dsonar.projectKey=payments
           
