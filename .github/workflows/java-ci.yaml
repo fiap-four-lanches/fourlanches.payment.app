@@ -22,7 +22,7 @@ jobs:
     - name: Build and Scan with Gradle
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: build sonarqube
+        arguments: build sonar
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
