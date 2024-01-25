@@ -19,20 +19,15 @@ jobs:
         distribution: temurin
         java-version: 17
         
-    - name: Build with Gradle
+    - name: Build and Scan with Gradle
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: build
-
-    - name: SonarQube Scan
-      # if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: sonarsource/sonarqube-scan-action@master
+        arguments: build sonarqube
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      with:
-        args: >
-          -Dsonar.java.binaries=build/classes/main
+
+
         
   docker-build:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
