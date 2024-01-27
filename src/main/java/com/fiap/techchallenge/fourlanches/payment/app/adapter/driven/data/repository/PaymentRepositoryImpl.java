@@ -5,14 +5,13 @@ import com.fiap.techchallenge.fourlanches.payment.app.adapter.driven.data.entity
 import com.fiap.techchallenge.fourlanches.payment.app.application.execption.NotFound;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.Payment;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.repository.PaymentRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class PaymentRepositoryImpl implements PaymentRepository {
+public class  PaymentRepositoryImpl implements PaymentRepository {
 
-    private MongoPaymentRepository mongoRepository;
+    private final MongoPaymentRepository mongoRepository;
 
     @Autowired
     public PaymentRepositoryImpl(MongoPaymentRepository mongoRepository) {

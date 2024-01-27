@@ -1,6 +1,5 @@
 package com.fiap.techchallenge.fourlanches.payment.app.domain.valueobject;
 
-import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.ExternalMetadata;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.OrderResume;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.Payment;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.PaymentStatus;

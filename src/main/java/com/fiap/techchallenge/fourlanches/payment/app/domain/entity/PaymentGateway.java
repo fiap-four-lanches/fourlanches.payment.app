@@ -9,6 +9,7 @@ public enum PaymentGateway {
         this.value = value;
     }
 
+    @Override
     public String toString() {
         return this.value;
     }

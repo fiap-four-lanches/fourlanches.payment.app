@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class PaymentUserCaseImpl implements PaymentUseCase {
+public class PaymentUseCaseImpl implements PaymentUseCase {
 
     private final PaymentRepository repository;
 
