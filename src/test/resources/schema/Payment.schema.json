@@ -1,0 +1,69 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "required": [
+        "id",
+        "customerId",
+        "order",
+        "status",
+        "isApproved",
+        "createdAt",
+        "updatedAt",
+        "externalReference",
+        "externalMetadata"
+    ],
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "customerId": {
+            "type": "integer"
+        },
+        "order": {
+            "type": "object",
+            "required": [
+                "id",
+                "totalPrice",
+                "description"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "totalPrice": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "status": {
+            "type": "string"
+        },
+        "isApproved": {
+            "type": "boolean"
+        },
+        "createdAt": {
+            "type": "string"
+        },
+        "updatedAt": {
+            "type": "string"
+        },
+        "externalReference": {
+            "type": "string"
+        },
+        "externalMetadata": {
+            "type": "object",
+            "required": [
+                "externalReference"
+            ],
+            "properties": {
+                "externalReference": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
