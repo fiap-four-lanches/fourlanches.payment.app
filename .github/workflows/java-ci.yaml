@@ -25,6 +25,7 @@ jobs:
         arguments: build sonar --info
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: https://sonarcloud.io
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   docker-build:
