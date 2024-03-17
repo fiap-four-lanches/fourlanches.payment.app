@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.techchallenge.fourlanches.payment.app.application.dto.OrderStatusQueueMessageDTO;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.usecase.PaymentUseCase;
+import com.fiap.techchallenge.fourlanches.payment.app.domain.valueobject.OrderStatus;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.valueobject.PaymentIntent;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,10 @@ public class PaymentQueueCancelConsumer {
                                                   @Header(X_REQUEST_ID) String xRequestId) throws JacksonException {
 
         var paymentCancellationMessage = mapper.readValue(message, OrderStatusQueueMessageDTO.class);
-        paymentUseCase.cancelPaymentByOrderId(paymentCancellationMessage.getOrderId());
+        var isFromProcessableOrigin = paymentCancellationMessage.getOrigin().equals("order")
+                || paymentCancellationMessage.getOrigin().equals("kitchen");
+        if (isFromProcessableOrigin && paymentCancellationMessage.getStatus() == OrderStatus.CANCELED) {
+            paymentUseCase.cancelPaymentByOrderId(paymentCancellationMessage.getOrderId());
+        }
     }
 }

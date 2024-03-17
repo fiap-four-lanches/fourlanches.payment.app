@@ -57,7 +57,7 @@ public class PaymentController {
             payed = Boolean.TRUE;
         }
 
-        if (topic.equals("merchant_order ")) {
+        if (topic.equals("merchant_order")) {
             var payment = paymentUseCase.findPaymentByExternalOrderId(id);
             // For now we will a third parameter just to mock, but when plugin into Mercado Pago it must call the
             // order endpoint https://api.mercadopago.com/merchant_orders/{id} to see if it was payed or not
