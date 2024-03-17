@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.fourlanches.payment.app.application.usecase;
 
 import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.Payment;
+import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.PaymentStatus;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.repository.PaymentRepository;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.usecase.PaymentUseCase;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.valueobject.PaymentIntent;
@@ -27,7 +28,21 @@ public class PaymentUseCaseImpl implements PaymentUseCase {
     }
 
     @Override
-    public void updatePayment(Payment toUpdatePayment) {
-        repository.updatePayment(toUpdatePayment);
+    public Payment updatePayment(Payment toUpdatePayment) {
+        return repository.updatePayment(toUpdatePayment);
+    }
+
+    @Override
+    public Payment cancelPaymentByOrderId(Long orderId) {
+        var paymentToBeCanceled = repository.getPaymentByOrderId(orderId);
+        // add here code to send request to refund when plug in into Mercado Pago gateway
+        paymentToBeCanceled.setStatus(PaymentStatus.CANCELLED);
+        paymentToBeCanceled.setDetail("order was cancelled");
+        return repository.updatePayment(paymentToBeCanceled);
+    }
+
+    @Override
+    public Payment findPaymentByExternalOrderId(String externalOrderId) {
+        return repository.findPaymentByExternalOrderId(externalOrderId);
     }
 }

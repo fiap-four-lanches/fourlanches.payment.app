@@ -1,9 +1,7 @@
 package com.fiap.techchallenge.fourlanches.payment.app.domain.valueobject;
 
-import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.ExternalMetadata;
-import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.OrderResume;
-import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.Payment;
-import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.PaymentStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,6 +23,9 @@ public class PaymentIntent {
     @NotNull
     private OrderResume order;
 
+    @JsonIgnore
+    private String requestId;
+
     public Payment toPayment() {
         var now = LocalDateTime.now();
         return Payment.builder()
@@ -34,6 +35,7 @@ public class PaymentIntent {
                 .isApproved(false)
                 .createdAt(now)
                 .updatedAt(now)
+                .internalMetadata(InternalMetadata.builder().originalRequestId(this.requestId).build())
                 .build();
     }
 }

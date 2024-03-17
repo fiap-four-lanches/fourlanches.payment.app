@@ -9,5 +9,9 @@ public interface PaymentUseCase {
 
     Payment getPaymentById(String id);
 
-    void updatePayment(Payment toUpdatePayment);
+    Payment updatePayment(Payment toUpdatePayment);
+
+    Payment cancelPaymentByOrderId(Long orderId);
+
+    Payment findPaymentByExternalOrderId(String externalOrderId);
 }

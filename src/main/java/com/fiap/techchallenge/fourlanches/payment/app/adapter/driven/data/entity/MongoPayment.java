@@ -1,9 +1,6 @@
 package com.fiap.techchallenge.fourlanches.payment.app.adapter.driven.data.entity;
 
-import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.ExternalMetadata;
-import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.OrderResume;
-import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.Payment;
-import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.PaymentStatus;
+import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +26,9 @@ public class MongoPayment {
     private LocalDateTime updatedAt;
     private String externalReference;
     private ExternalMetadata externalMetadata;
+    private String detail;
+    private String externalOrderId;
+    private InternalMetadata internalMetadata;
 
     public Payment toPayment() {
         return Payment.builder()
@@ -41,6 +41,9 @@ public class MongoPayment {
                 .updatedAt(this.updatedAt)
                 .externalReference(this.externalReference)
                 .externalMetadata(this.externalMetadata)
+                .detail(this.detail)
+                .externalOrderId(this.externalOrderId)
+                .internalMetadata(this.internalMetadata)
                 .build();
     }
 
@@ -54,6 +57,9 @@ public class MongoPayment {
                 .updatedAt(payment.getUpdatedAt())
                 .externalReference(payment.getExternalReference())
                 .externalMetadata(payment.getExternalMetadata())
+                .detail(payment.getDetail())
+                .externalOrderId(payment.getExternalOrderId())
+                .internalMetadata(payment.getInternalMetadata())
                 .build();
     }
 }

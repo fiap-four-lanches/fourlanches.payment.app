@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import utils.PaymentHelper;
@@ -27,22 +28,27 @@ public class PaymentControllerTest {
     @Mock
     private PaymentUseCase paymentUseCase;
 
+    @Mock
+    private AmqpTemplate queueSender;
+
+
     AutoCloseable openMocks;
 
     @BeforeEach
-    void setup(){
+    void setup() {
 
         openMocks = MockitoAnnotations.openMocks(this);
-        PaymentController paymentController = new PaymentController(paymentUseCase);
+        PaymentController paymentController = new PaymentController(paymentUseCase, queueSender);
         mockMvc = MockMvcBuilders.standaloneSetup(paymentController)
                 .build();
     }
 
     @AfterEach
-    void tearDown() throws Exception{
+    void tearDown() throws Exception {
         openMocks.close();
 
     }
+
     @Test
     void ShouldCreatePayment() throws Exception {
         // Arrange
@@ -54,9 +60,9 @@ public class PaymentControllerTest {
 
         // Act
         mockMvc.perform(
-                    post("/payments")
-                    .contentType("application/json")
-                    .content(AsJsonString(paymentIntent)))
+                        post("/payments")
+                                .contentType("application/json")
+                                .content(AsJsonString(paymentIntent)))
                 .andExpect(status().isOk());
 
 
@@ -81,7 +87,6 @@ public class PaymentControllerTest {
     }
 
     public static String AsJsonString(final Object object) throws JsonProcessingException {
-        var result = new ObjectMapper().findAndRegisterModules().writeValueAsString(object);
-        return result;
+        return new ObjectMapper().findAndRegisterModules().writeValueAsString(object);
     }
 }
