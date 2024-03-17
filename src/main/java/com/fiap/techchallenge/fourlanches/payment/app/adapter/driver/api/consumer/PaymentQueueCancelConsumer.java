@@ -28,12 +28,15 @@ public class PaymentQueueCancelConsumer {
     @RabbitListener(queues = "${queue.payment.cancel.name}")
     public void receivePaymentCancellationMessage(@Payload String message,
                                                   @Header(X_REQUEST_ID) String xRequestId) throws JacksonException {
-
+        log.info("received payment cancellation message [message:{}][request_id:{}]", message, xRequestId);
         var paymentCancellationMessage = mapper.readValue(message, OrderStatusQueueMessageDTO.class);
         var isFromProcessableOrigin = paymentCancellationMessage.getOrigin().equals("order")
                 || paymentCancellationMessage.getOrigin().equals("kitchen");
         if (isFromProcessableOrigin && paymentCancellationMessage.getStatus() == OrderStatus.CANCELED) {
-            paymentUseCase.cancelPaymentByOrderId(paymentCancellationMessage.getOrderId());
+            paymentUseCase.cancelPaymentByOrderId(paymentCancellationMessage.getOrderId(), xRequestId);
+            log.info("processed payment cancellation message [message:{}][request_id:{}]", message, xRequestId);
+            return;
         }
+        log.info("ignored cancellation message because it was not for payment [message:{}][request_id:{}]", message, xRequestId);
     }
 }

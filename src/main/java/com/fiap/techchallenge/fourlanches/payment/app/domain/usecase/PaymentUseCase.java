@@ -11,7 +11,7 @@ public interface PaymentUseCase {
 
     Payment updatePayment(Payment toUpdatePayment);
 
-    Payment cancelPaymentByOrderId(Long orderId);
+    Payment cancelPaymentByOrderId(Long orderId, String requestId);
 
     Payment findPaymentByExternalOrderId(String externalOrderId);
 }

@@ -29,8 +29,10 @@ public class PaymentQueueConsumer {
     @RabbitListener(queues = "${queue.payment.name}")
     public void receivePaymentIntentMessage(@Payload String message,
                                             @Header(X_REQUEST_ID) String xRequestId) throws JacksonException {
+        log.info("received payment intent message [message:{}][request_id:{}]", message, xRequestId);
         var paymentIntent = mapper.readValue(message, PaymentIntent.class);
         paymentIntent.setRequestId(xRequestId);
         paymentUseCase.createPaymentIntent(paymentIntent);
+        log.info("processed payment intent message [message:{}][request_id:{}]", message, xRequestId);
     }
 }

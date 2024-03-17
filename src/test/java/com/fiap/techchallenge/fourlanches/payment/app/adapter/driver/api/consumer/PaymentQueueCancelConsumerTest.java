@@ -49,7 +49,7 @@ class PaymentQueueCancelConsumerTest {
         paymentQueueCancelConsumer.receivePaymentCancellationMessage(message, xRequestId);
 
         // Assert
-        verify(paymentUseCase, times(1)).cancelPaymentByOrderId(eq(orderId));
+        verify(paymentUseCase, times(1)).cancelPaymentByOrderId(eq(orderId), eq(xRequestId));
     }
 
     @Test
@@ -69,7 +69,7 @@ class PaymentQueueCancelConsumerTest {
         paymentQueueCancelConsumer.receivePaymentCancellationMessage(message, xRequestId);
 
         // Assert
-        verify(paymentUseCase, times(1)).cancelPaymentByOrderId(eq(orderId));
+        verify(paymentUseCase, times(1)).cancelPaymentByOrderId(eq(orderId), eq(xRequestId));
     }
 
     @Test
@@ -89,7 +89,7 @@ class PaymentQueueCancelConsumerTest {
         paymentQueueCancelConsumer.receivePaymentCancellationMessage(message, xRequestId);
 
         // Assert
-        verify(paymentUseCase, times(0)).cancelPaymentByOrderId(eq(orderId));
+        verify(paymentUseCase, times(0)).cancelPaymentByOrderId(eq(orderId), eq(xRequestId));
     }
 
     @Test
@@ -109,7 +109,7 @@ class PaymentQueueCancelConsumerTest {
         paymentQueueCancelConsumer.receivePaymentCancellationMessage(message, xRequestId);
 
         // Assert
-        verify(paymentUseCase, times(0)).cancelPaymentByOrderId(eq(orderId));
+        verify(paymentUseCase, times(0)).cancelPaymentByOrderId(eq(orderId), eq(xRequestId));
     }
 
     @Test

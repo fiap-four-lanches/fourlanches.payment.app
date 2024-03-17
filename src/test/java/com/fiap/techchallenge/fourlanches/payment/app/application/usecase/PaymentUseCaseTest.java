@@ -1,5 +1,6 @@
 package com.fiap.techchallenge.fourlanches.payment.app.application.usecase;
 
+import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.InternalMetadata;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.Payment;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.PaymentStatus;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.repository.PaymentRepository;
@@ -97,14 +98,16 @@ class PaymentUseCaseTest {
         // Arrange
         var payment = PaymentHelper.generatePayment();
         var orderId = 1L;
+        var requestId = "test-rq-1";
 
         when(paymentRepository.getPaymentByOrderId(eq(orderId))).thenReturn(payment);
 
         // Act
-        paymentUseCase.cancelPaymentByOrderId(orderId);
+        paymentUseCase.cancelPaymentByOrderId(orderId, requestId);
 
         // Assert
         payment.setStatus(PaymentStatus.CANCELLED);
+        payment.setInternalMetadata(InternalMetadata.builder().originalRequestId(requestId).build());
         verify(paymentRepository, times((1))).updatePayment(eq(payment));
     }
 
