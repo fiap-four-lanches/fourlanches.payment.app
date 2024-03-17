@@ -1,14 +1,15 @@
 package com.fiap.techchallenge.fourlanches.payment.app.application.usecase;
 
 import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.Payment;
+import com.fiap.techchallenge.fourlanches.payment.app.domain.entity.PaymentStatus;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.repository.PaymentRepository;
 import com.fiap.techchallenge.fourlanches.payment.app.domain.usecase.PaymentUseCase;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 import utils.PaymentHelper;
 import utils.PaymentIntentHelper;
@@ -17,26 +18,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
 class PaymentUseCaseTest {
-
-    private PaymentUseCase paymentUseCase;
 
     @Mock
     private PaymentRepository paymentRepository;
 
-    AutoCloseable openMocks;
+    @InjectMocks
+    private PaymentUseCaseImpl paymentUseCase;
 
-    @BeforeEach
-    void setup() {
-
-        openMocks = MockitoAnnotations.openMocks(this);
-        paymentUseCase = new PaymentUseCaseImpl(paymentRepository);
-    }
-
-    @AfterEach()
-    void tearDown() throws Exception {
-        openMocks.close();
-    }
 
     @Test
     void ShouldCreatePayment() {
@@ -100,5 +90,37 @@ class PaymentUseCaseTest {
 
         // Assert
         verify(paymentRepository, times((1))).updatePayment(any(Payment.class));
+    }
+
+    @Test
+    void ShouldCancelPaymentByOrderId() {
+        // Arrange
+        var payment = PaymentHelper.generatePayment();
+        var orderId = 1L;
+
+        when(paymentRepository.getPaymentByOrderId(eq(orderId))).thenReturn(payment);
+
+        // Act
+        paymentUseCase.cancelPaymentByOrderId(orderId);
+
+        // Assert
+        payment.setStatus(PaymentStatus.CANCELLED);
+        verify(paymentRepository, times((1))).updatePayment(eq(payment));
+    }
+
+    @Test
+    void ShouldFindPaymentByExternalOrderId() {
+        // Arrange
+        var payment = PaymentHelper.generatePayment();
+        var externalOrderId = "external-1";
+
+        when(paymentRepository.findPaymentByExternalOrderId(eq(externalOrderId))).thenReturn(payment);
+
+        // Act
+        var wantedPayment = paymentUseCase.findPaymentByExternalOrderId(externalOrderId);
+
+        // Assert
+        verify(paymentRepository, times((1))).findPaymentByExternalOrderId(eq(externalOrderId));
+        assertThat(wantedPayment).isEqualTo(payment);
     }
 }

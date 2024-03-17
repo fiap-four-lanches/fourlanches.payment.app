@@ -23,7 +23,7 @@ sonar {
         property "sonar.projectKey", "fiap-four-lanches_fourlanches.payment.app"
         property "sonar.organization", "fiap-four-lanches"
         property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.exclusions","**/*DTO.java"
+        property "sonar.exclusions","**/*DTO.java, **/*Repository*"
     }
 }
 

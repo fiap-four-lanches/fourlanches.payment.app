@@ -1,22 +1,43 @@
 version: '3'
 services:
- fourlanches-payment-service:
-   build:
-     context: .
-     dockerfile: Dockerfile
-   depends_on:
-     - mongodb
-   environment:
-     - MONGO_CONNECTION_STRING=mongodb://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@mongodb:27017/${DATABASE_BASE}
-   ports:
-     - '8080:8080'
- mongodb:
-   image: mongo:latest
-   environment:
-     - MONGO_INITDB_DATABASE=${DATABASE_BASE}
-     - MONGO_INITDB_ROOT_USERNAME=${DATABASE_USERNAME}
-     - MONGO_INITDB_ROOT_PASSWORD=${DATABASE_PASSWORD}
-   ports:
-     - '27017:27017'
-   volumes:
-     - ./data:/data/db
+  fourlanches-payment-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb
+      - rabbitmq
+    environment:
+      - MONGO_CONNECTION_STRING=mongodb://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@mongodb:27017/${DATABASE_BASE}
+    ports:
+      - '8080:8080'
+  mongodb:
+    image: mongo:latest
+    environment:
+      - MONGO_INITDB_DATABASE=${DATABASE_BASE}
+      - MONGO_INITDB_ROOT_USERNAME=${DATABASE_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - RABBITMQ_VHOST=${RABBITMQ_VHOST}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USER=${RABBITMQ_USER}
+      - RABBITMQ_PASS=${RABBITMQ_PASS}
+      - QUEUE_EXCHANGE=${QUEUE_EXCHANGE}
+      - QUEUE_ORDER_STATUS_NAME=${QUEUE_ORDER_STATUS_NAME}
+      - QUEUE_PAYMENT_NAME=${QUEUE_PAYMENT_NAME}
+      - QUEUE_PAYMENT_CANCEL_NAME=${QUEUE_PAYMENT_CANCEL_NAME}
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./data:/data/db
+  rabbitmq:
+    env_file:
+      - .env
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ./.docker-conf/rabbitmq/log/:/var/log/rabbitmq
