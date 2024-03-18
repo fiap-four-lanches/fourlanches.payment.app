@@ -9,5 +9,9 @@ public interface PaymentRepository {
 
     Payment getPaymentById(String id);
 
-    void updatePayment(Payment toUpdatePayment);
+    Payment updatePayment(Payment toUpdatePayment);
+
+    Payment getPaymentByOrderId(Long orderId);
+
+    Payment findPaymentByExternalOrderId(String externalOrderId);
 }
