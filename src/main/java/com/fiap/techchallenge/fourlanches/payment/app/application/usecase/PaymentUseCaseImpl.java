@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -20,6 +22,9 @@ public class PaymentUseCaseImpl implements PaymentUseCase {
     @Override
     public Payment createPaymentIntent(PaymentIntent paymentIntent) {
         var payment = paymentIntent.toPayment();
+        // here we should try to make the payment at the Mercado Pago, but for now we will generate a fake id
+        var uuid = UUID.randomUUID();
+        payment.setExternalOrderId(uuid.toString());
         return repository.create(payment);
     }
 

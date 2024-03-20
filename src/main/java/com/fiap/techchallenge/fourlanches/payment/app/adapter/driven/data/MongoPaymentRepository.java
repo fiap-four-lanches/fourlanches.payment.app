@@ -13,5 +13,5 @@ public interface MongoPaymentRepository extends MongoRepository<MongoPayment, St
 
     Optional<MongoPayment> findMongoPaymentByOrderId(Long orderId);
 
-    Optional<MongoPayment> findMongoPaymentByExternalOrderId(String orderId);
+    Optional<MongoPayment> findMongoPaymentByExternalOrderId(String externalOrderId);
 }

@@ -32,7 +32,9 @@ public class PaymentQueueConsumer {
         log.info("received payment intent message [message:{}][request_id:{}]", message, xRequestId);
         var paymentIntent = mapper.readValue(message, PaymentIntent.class);
         paymentIntent.setRequestId(xRequestId);
-        paymentUseCase.createPaymentIntent(paymentIntent);
-        log.info("processed payment intent message [message:{}][request_id:{}]", message, xRequestId);
+        var paymentCreated = paymentUseCase.createPaymentIntent(paymentIntent);
+        var externalOrderId = paymentCreated.getExternalOrderIdSafely();
+        log.info("processed payment intent message [message:{}][external_order_id:{}][request_id:{}]",
+                message, externalOrderId, xRequestId);
     }
 }
