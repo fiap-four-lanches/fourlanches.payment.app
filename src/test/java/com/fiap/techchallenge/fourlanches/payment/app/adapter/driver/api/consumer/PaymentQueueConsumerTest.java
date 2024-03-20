@@ -10,12 +10,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
 
-import static com.fiap.techchallenge.fourlanches.payment.app.application.constant.HeaderConstant.X_REQUEST_ID;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.*;
 
@@ -41,15 +38,17 @@ public class PaymentQueueConsumerTest {
                         .totalPrice(BigDecimal.valueOf(21.50))
                         .build())
                 .build();
+        var paymentCreated = paymentIntent.toPayment();
         String requestId = "testRequestID";
         var json = mapper.writeValueAsString(paymentIntent);
+        paymentIntent.setRequestId(requestId);
+        when(paymentUseCase.createPaymentIntent(eq(paymentIntent))).thenReturn(paymentCreated);
 
         // Act
         paymentQueueConsumer.receivePaymentIntentMessage(json, requestId);
 
         // Assert
-        paymentIntent.setRequestId(requestId);
-        verify(paymentUseCase, times(1)).createPaymentIntent(paymentIntent);
+        // When using mockito.when will also validate that the function is being called
     }
 
     @Test

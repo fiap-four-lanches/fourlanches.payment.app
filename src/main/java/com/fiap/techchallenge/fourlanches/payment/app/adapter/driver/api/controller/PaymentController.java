@@ -10,6 +10,7 @@ import com.fiap.techchallenge.fourlanches.payment.app.domain.valueobject.OrderSt
 import com.fiap.techchallenge.fourlanches.payment.app.domain.valueobject.PaymentIntent;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
@@ -22,6 +23,7 @@ import java.util.Map;
 
 import static com.fiap.techchallenge.fourlanches.payment.app.application.constant.HeaderConstant.X_REQUEST_ID;
 
+@Slf4j
 @RestController
 @RequestMapping("payments")
 @AllArgsConstructor
@@ -62,7 +64,8 @@ public class PaymentController {
             // For now we will a third parameter just to mock, but when plugin into Mercado Pago it must call the
             // order endpoint https://api.mercadopago.com/merchant_orders/{id} to see if it was payed or not
             payment.setStatus(payed ? PaymentStatus.APPROVED : PaymentStatus.REJECTED);
-            paymentUseCase.updatePayment(payment);
+            var paymentUpdated = paymentUseCase.updatePayment(payment);
+            log.info("[payment:{}]", paymentUpdated);
 
             MessageProperties messageProperties = new MessageProperties();
             Map<String, Object> headers = new HashMap<>();

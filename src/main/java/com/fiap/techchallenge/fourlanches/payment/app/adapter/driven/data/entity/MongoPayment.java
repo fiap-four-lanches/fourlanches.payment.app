@@ -48,7 +48,7 @@ public class MongoPayment {
     }
 
     public static MongoPayment fromPayment(Payment payment) {
-        return MongoPayment.builder()
+        var mongoPayment = MongoPayment.builder()
                 .customerId(payment.getCustomerId())
                 .order(payment.getOrder())
                 .status(payment.getStatus())
@@ -61,5 +61,9 @@ public class MongoPayment {
                 .externalOrderId(payment.getExternalOrderId())
                 .internalMetadata(payment.getInternalMetadata())
                 .build();
+        if (!payment.getIdSafely().isEmpty()) {
+            mongoPayment.setId(payment.getIdSafely());
+        }
+        return mongoPayment;
     }
 }

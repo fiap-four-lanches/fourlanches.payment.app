@@ -39,8 +39,8 @@ public class PaymentRepositoryImpl implements PaymentRepository {
 
     @Override
     public Payment updatePayment(Payment toUpdatePayment) {
-        mongoRepository.save(MongoPayment.fromPayment(toUpdatePayment));
-        return toUpdatePayment;
+        var updated = mongoRepository.save(MongoPayment.fromPayment(toUpdatePayment));
+        return updated.toPayment();
     }
 
     @Override
